@@ -1,23 +1,23 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
+import { playAudio } from "../util";
 
 const LibrarySong = ({
-  song,
-  songs,
-  setCurrentSong,
+  name,
+  artist,
+  cover,
   id,
+  setCurrentSong,
+  songs,
   audioRef,
   isPlaying,
   setSongs,
+  active,
 }) => {
-  const songSelectHandler = async () => {
-    const selectedSong = songs.filter(
-      (state) => (state.id = setCurrentSong(selectedSong[0]))
-    );
-    await setCurrentSong(song);
-    //Add Active States
-    const newSongs = song.map((song) => {
+  const songSelectHandler = () => {
+    const selectedSong = songs.filter((state) => state.id === id);
+    setCurrentSong({ ...selectedSong[0] });
+    //Set Active in library
+    const newSongs = songs.map((song) => {
       if (song.id === id) {
         return {
           ...song,
@@ -31,18 +31,19 @@ const LibrarySong = ({
       }
     });
     setSongs(newSongs);
-    //Check if song is Playing
-    if (isPlaying) audioRef.current.play();
+
+    //Play audio
+    playAudio(isPlaying, audioRef);
   };
   return (
     <div
       onClick={songSelectHandler}
-      className={`library-song ${song.active ? "selected" : ""}`}
+      className={`library-song ${active ? "selected" : ""}`}
     >
-      <img alt={song.name} src={song.cover}></img>
+      <img src={cover} alt="" />
       <div className="song-description">
-        <h3>{song.name}</h3>
-        <h4>{song.artist}</h4>
+        <h3>{name}</h3>
+        <h4>{artist}</h4>
       </div>
     </div>
   );
